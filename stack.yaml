@@ -1,0 +1,55 @@
+version: "3.3"
+
+services:
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    env_file:
+      - 'grafana.env'
+    configs:
+      - source: grafana.conf
+        target: /etc/grafana/provisioning/datasource.yaml
+    deploy:
+      replicas: 1
+    volumes:
+    ## Change this to the directory you would like to store grafana data in.
+      - /data/grafana:/var/lib/grafana
+
+  influxdb:
+    image: influxdb:latest
+    configs:
+      - source: influxdb.conf
+        target: /etc/influxdb/influxdb.conf
+    env_file:
+      - 'influxdb.env'
+    deploy:
+      replicas: 1
+    volumes:
+      ## Change this to the directory you would like to store influxdb data in.
+      - /data/influxdb:/var/lib/influxdb
+
+  telegraf:
+    image: telegraf:1.9
+    command: --config-directory /ingest/config
+    configs:
+      - source: telegraf.conf
+        target: /etc/telegraf/telegraf.conf
+    deploy:
+      replicas: 1
+    volumes:
+      ## Change this to the location of data to be ingested.
+       - /Volumes/safl_osl/Grafana_Ingest:/ingest
+
+configs:
+  influxdb.conf:
+    file: ./influxdb.conf
+  telegraf.conf:
+    file: ./telegraf.conf
+  grafana.conf:
+    file: ./grafana.conf
+
+    #volumes:
+      # # Data persistency
+      # # sudo mkdir -p /srv/docker/influxdb/data
+      # - /srv/docker/influxdb/data:/var/lib/influxdb
