@@ -48,8 +48,3 @@ configs:
     file: ./telegraf.conf
   grafana.conf:
     file: ./grafana.conf
-
-    #volumes:
-      # # Data persistency
-      # # sudo mkdir -p /srv/docker/influxdb/data
-      # - /srv/docker/influxdb/data:/var/lib/influxdb
