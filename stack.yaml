@@ -31,7 +31,7 @@ services:
 
   telegraf:
     image: telegraf:1.9
-    command: --config-directory /ingest/config
+    command: --config-directory /ingest/conf
     configs:
       - source: telegraf.conf
         target: /etc/telegraf/telegraf.conf
